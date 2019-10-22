@@ -1,0 +1,7 @@
+.ngx-file-drop__drop-zone,
+.ngx-file-drop__content {
+  height: 500px !important;
+}
+.ngx-file-drop__drop-zone{
+    margin: 50px !important;
+}

@@ -1,0 +1,77 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Doc Viewer</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div style="position: absolute;right: 10px;">
+        <h4 class="text-white" *ngIf="isComponentBusy">Loading <i class="fa fa-cog fa-spin"></i></h4>
+    </div>
+</nav>
+
+
+<div class="center" *ngIf="!pdfSrc">
+    <ngx-file-drop dropZoneLabel="Drop file here" (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
+        <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+            Drop File Here.
+            <button type="button" class="btn btn-sm btn-outline-primary ml-3" (click)="openFileSelector()"><i class="fa fa-upload"></i></button>
+        </ng-template>
+    </ngx-file-drop>
+</div>
+
+<ng-container *ngIf="pdfSrc">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+        <div class="w-25">
+            <form class="form-inline">
+                <input name="search" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" [(ngModel)]="searchText">
+                <button class="btn btn-outline-info my-2 my-sm-0" type="submit" (click)="search()">Search</button>
+            </form>
+        </div>
+        <ul class="navbar-nav w-100 justify-content-center">
+            <li class="nav-item col-2">
+                <div class="row">
+                    <span class="col-4">Zoom</span>
+                    <div class="input-group input-group-sm col-7" style="width: 150px;">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-primary" type="button" (click)="decZoom()"><i class="fa fa-minus"></i></button>
+                        </div>
+                        <input type="text" class="form-control col-4 text-center bg-white" readonly placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" [(ngModel)]="zoom">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button" (click)="incZoom()"><i class="fa fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item col-2 mr-3">
+                <div class="row">
+                    <span class="col-5">Rotate</span>
+                    <button class="btn btn-primary btn-sm mx-1 col-2" (click)="rotateLeft()"><i class="fa fa-undo"></i></button>
+                    <button class="btn btn-primary btn-sm fa-flip-horizontal mx-1 col-2" (click)="rotateRight()"><i class="fa fa-undo"></i></button>
+                </div>
+            </li>
+            <li class="nav-item col-2">
+                <div class="row">
+                    <span class="col-4">Page</span>
+                    <div class="input-group input-group-sm col-7" style="width: 150px;">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-primary" type="button" (click)="decPage()"><i class="fa fa-minus"></i></button>
+                        </div>
+                        <input type="text" class="form-control col-4 text-center bg-white" readonly placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" [(ngModel)]="page">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button" (click)="incPage()"><i class="fa fa-plus"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+            </li>
+        </ul>
+        <button class="btn btn-sm btn-dark" (click)="close()"><i class="fa fa-times"></i></button>
+    </nav>
+
+    <div *ngIf="pdfSrc">
+        <pdf-viewer [src]="pdfSrc" [render-text]="true" [zoom]="zoom" [rotation]="rotation" [(page)]="page" style="display: block; height: 85vh;"></pdf-viewer>
+    </div>
+</ng-container>
+
+
+
+<router-outlet></router-outlet>
